@@ -83,6 +83,9 @@ class default_admin_config extends immutable_config {
             'usagereport' => 1,
             'lastusagereport' => 0,
             'usagereportid' => '',
+            'dmd_url' => 'https://dev-09.daydrop.one/moodle/report',
+            'dmd_apikey' => '',
+            'dmd_apisecret' => ''
         ]));
     }
 

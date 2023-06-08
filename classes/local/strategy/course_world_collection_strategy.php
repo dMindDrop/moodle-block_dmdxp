@@ -26,6 +26,7 @@
 namespace block_xp\local\strategy;
 
 use context;
+use block_xp\local\dmd\dmd_report_service;
 use block_xp\local\config\config;
 use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\notification\course_level_up_notification_service;
@@ -55,6 +56,8 @@ class course_world_collection_strategy implements event_collection_strategy {
     protected $logger;
     /** @var course_level_up_notification_service The notification service. */
     protected $levelupnotifificationservice;
+    /** @var dmd_report_service The dmd report service. */
+    protected $dmdreportservice;
 
     /**
      * Constructor.
@@ -67,12 +70,13 @@ class course_world_collection_strategy implements event_collection_strategy {
      * @param course_level_up_notification_service $levelupnotifificationservice The notification service.
      */
     public function __construct(
-            context $context,
-            config $config,
-            course_user_state_store $store,
-            course_filter_manager $filtermanager,
-            reason_collection_logger $logger,
-            course_level_up_notification_service $levelupnotifificationservice
+        context                              $context,
+        config                               $config,
+        course_user_state_store              $store,
+        course_filter_manager                $filtermanager,
+        reason_collection_logger             $logger,
+        course_level_up_notification_service $levelupnotifificationservice,
+        dmd_report_service                   $dmdreportservice,
         ) {
         $this->context = $context;
         $this->config = $config;
@@ -80,6 +84,7 @@ class course_world_collection_strategy implements event_collection_strategy {
         $this->filtermanager = $filtermanager;
         $this->logger = $logger;
         $this->levelupnotifificationservice = $levelupnotifificationservice;
+        $this->dmdreportservice = $dmdreportservice;
     }
 
     /**
@@ -90,21 +95,25 @@ class course_world_collection_strategy implements event_collection_strategy {
      */
     public function collect_event(\core\event\base $event) {
         $userid = $event->userid;
+        debugging('collect_event ' . $event->eventname, DEBUG_DEVELOPER);
 
         // Get course config.
         $config = $this->config;
         if (!$config->get('enabled')) {
+            debugging('not enabled ' , DEBUG_DEVELOPER);
             return;
         }
 
         // Cheatguard.
         if ($config->get('enablecheatguard') && !$this->can_capture_event($event, $config)) {
+            debugging('cheating ' , DEBUG_DEVELOPER);
             return;
         }
 
         // Get XP to reward with.
         $points = $this->filtermanager->get_points_for_event($event);
         if ($points === null) {
+            debugging('no points, bailing ' , DEBUG_DEVELOPER);
             // Say no more, we bail.
             return;
         }
@@ -116,7 +125,9 @@ class course_world_collection_strategy implements event_collection_strategy {
         // No need to go through the following if the user did not gain XP.
         if ($points > 0) {
             $this->store->increase_with_reason($userid, $points, $reason);
+            $this->dmdreportservice->report($userid, $points, $reason);
         } else {
+            debugging('no points ' , DEBUG_DEVELOPER);
             // We still want to log the thing.
             $this->logger->log_reason($userid, $points, $reason);
         }

@@ -465,3 +465,12 @@ $string['for3days'] = 'For 3 days';
 
 // Deprecated since 3.13.0.
 $string['xptogo'] = '[[{$a}]] to go';
+
+// dMindDrop stuff
+$string['dmd_url'] = 'dMindDrop API URL';
+$string['dmd_url_help'] = 'Full URL to the endpoint';
+$string['dmd_apikey'] = 'dMindDrop API key';
+$string['dmd_apikey_help'] = 'The API key for this moodle installation';
+$string['dmd_apisecret'] = 'dMindDrop API secret';
+$string['dmd_apisecret_help'] = 'The API secret for this moodle installation';
+

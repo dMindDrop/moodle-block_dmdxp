@@ -189,6 +189,16 @@ class default_settings_maker implements settings_maker {
         });
         $settings[] = $setting;
 
+        $settings[] = (new admin_setting_configtext('block_xp/dmd_url',
+            get_string('dmd_url', 'block_xp'), get_string('dmd_url_help', 'block_xp'), ''));
+
+        $settings[] = (new admin_setting_configtext('block_xp/dmd_apikey',
+            get_string('dmd_apikey', 'block_xp'), get_string('dmd_apikey_help', 'block_xp'), ''));
+
+        $settings[] = (new admin_setting_configtext('block_xp/dmd_apisecret',
+            get_string('dmd_apisecret', 'block_xp'), get_string('dmd_apisecret_help', 'block_xp'), ''));
+
+
         return $settings;
     }
 

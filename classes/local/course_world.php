@@ -108,7 +108,9 @@ class course_world implements world {
                 $this->get_store(),
                 $this->get_filter_manager(),
                 $this->get_collection_logger(),
-                $this->get_level_up_notification_service()
+                $this->get_level_up_notification_service(),
+                $this->get_d_mind_drop_report_service()
+
             );
         }
         return $this->strategy;
@@ -185,6 +187,10 @@ class course_world implements world {
     public function get_level_up_notification_service() {
         // TODO We could put that somewhere else.
         return new \block_xp\local\notification\course_level_up_notification_service($this->courseid);
+    }
+
+    public function get_d_mind_drop_report_service() {
+        return new \block_xp\local\dmd\dmd_report_service($this->courseid);
     }
 
     /**
