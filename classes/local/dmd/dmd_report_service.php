@@ -63,7 +63,7 @@ class dmd_report_service {
      * @param int $userid The user ID.
      * @return void
      */
-    public function report($userid, $points, $reason) {
+    public function report($userid, $points, $reason, $reputationpath) {
         debugging('Executing report ', DEBUG_DEVELOPER);
 
         if( $this->canReport() ) {
@@ -73,6 +73,7 @@ class dmd_report_service {
                 'userid' => $userid,
                 'points' => $points,
                 'reason' => $reason,
+                'reputationpath' => $reputationpath,
             ]);
             \core\task\manager::queue_adhoc_task($reportTask);
         } else {

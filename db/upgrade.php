@@ -552,5 +552,15 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2022090112, 'xp');
     }
 
+    if( $oldversion < 2123042405) {
+        $table = new xmldb_table('block_xp_filters');
+        // add reputationpath text field with default value ''
+        $field = new xmldb_field('reputationpath', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, '', 'points');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_block_savepoint(true, 2123042405, 'xp');
+
+    }
     return true;
 }

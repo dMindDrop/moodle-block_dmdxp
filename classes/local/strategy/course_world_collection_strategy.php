@@ -117,6 +117,7 @@ class course_world_collection_strategy implements event_collection_strategy {
             // Say no more, we bail.
             return;
         }
+        $reputationpath = $this->filtermanager->get_reputationpath_for_event($event);
 
         // Make up the reason.
         $reason = new event_name_reason($event->eventname);
@@ -125,7 +126,7 @@ class course_world_collection_strategy implements event_collection_strategy {
         // No need to go through the following if the user did not gain XP.
         if ($points > 0) {
             $this->store->increase_with_reason($userid, $points, $reason);
-            $this->dmdreportservice->report($userid, $points, $reason);
+            $this->dmdreportservice->report($userid, $points, $reason, $reputationpath);
         } else {
             debugging('no points ' , DEBUG_DEVELOPER);
             // We still want to log the thing.

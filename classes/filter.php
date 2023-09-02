@@ -69,6 +69,12 @@ class block_xp_filter implements renderable {
     protected $points = 0;
 
     /**
+     * Dmd Reputation path for this filter.
+     *
+     * @var int
+     */
+    protected $reputationpath = '';
+    /**
      * Rule.
      *
      * This is not stored in the DB, it is constructed when needed.
@@ -124,6 +130,7 @@ class block_xp_filter implements renderable {
         $record = new stdClass();
         $record->courseid = $this->courseid;
         $record->points = $this->points;
+        $record->reputationpath = $this->reputationpath;
         $record->ruledata = $this->ruledata;
         $record->sortorder = $this->sortorder;
         $record->category = $this->category;
@@ -170,6 +177,15 @@ class block_xp_filter implements renderable {
     }
 
     /**
+     * Return the dmd reputation path.
+     *
+     * @return string points.
+     */
+    public function get_reputationpath() {
+        return $this->reputationpath;
+    }
+
+    /**
      * Return the rule object.
      *
      * @return block_xp_rule
@@ -207,7 +223,10 @@ class block_xp_filter implements renderable {
                 continue;
             }
 
-            if ($key == 'points') {
+            if ($key == 'reputationpath') {
+                // Make sure it is a lowercase string, empty string is ok
+                $value = is_string($value) ? strtolower($value) : '';
+            } else if ($key == 'points') {
                 // Prevent negatives.
                 $value = abs(intval($value));
             } else if ($key == 'sortorder') {
@@ -281,6 +300,15 @@ class block_xp_filter implements renderable {
     }
 
     /**
+     * Set the reputation path.
+     *
+     * @param string $reputationpath
+     */
+    public function set_reputationpath($reputationpath) {
+        $this->reputationpath = $reputationpath;
+    }
+
+    /**
      * Set the points.
      *
      * @param int $points
@@ -343,6 +371,10 @@ class block_xp_filter implements renderable {
         // If the values are not set, they won't be cast and they property won't be assigned.
         if (!empty($data['courseid'])) {
             $valid = $valid && clean_param($data['courseid'], PARAM_INT) == $data['courseid'];
+        }
+        // validate reputationpath
+        if (!empty($data['reputationpath'])) {
+            $valid = $valid && is_string($data['reputationpath']);
         }
         if (!empty($data['points'])) {
             $valid = $valid && clean_param($data['points'], PARAM_INT) == $data['points'];

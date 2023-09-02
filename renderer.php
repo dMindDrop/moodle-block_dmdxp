@@ -547,14 +547,20 @@ class block_xp_renderer extends plugin_renderer_base {
 
             $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex'
                 . ' xp-items-center xp-leading-tight');
-            $content .= get_string('awardaxpwhen', 'block_xp',
-                html_writer::empty_tag('input', array(
+            $content .= get_string('awardaxpwhen', 'block_xp', array(
+                'points' => html_writer::empty_tag('input', array(
                     'type' => 'text',
                     'value' => $filter->get_points(),
                     'size' => 3,
                     'name' => $basename . '[points]',
-                    'class' => 'form-control block_xp-form-control-inline !xp-mr-1'))
-            );
+                    'class' => 'form-control block_xp-form-control-inline !xp-mr-1')),
+                'reputationpath' => html_writer::empty_tag('input', array(
+                    'type' => 'text',
+                    'value' => $filter->get_reputationpath(),
+                    'size' => 50,
+                    'name' => $basename . '[reputationpath]',
+                    'class' => 'form-control block_xp-form-control-inline !xp-mr-1')),
+            ));
             $content .= html_writer::end_div();
 
             $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');

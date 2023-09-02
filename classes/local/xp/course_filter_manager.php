@@ -110,6 +110,20 @@ class course_filter_manager {
         }
         return null;
     }
+    /**
+     * Return the reputation path filtered for this event.
+     *
+     * @param \core\event\base $event The event.
+     * @return int Points, or null.
+     */
+    public function get_reputationpath_for_event(\core\event\base $event) {
+        foreach ($this->get_filters() as $filter) {
+            if ($filter->match($event)) {
+                return $filter->get_reputationpath();
+            }
+        }
+        return null;
+    }
 
     /**
      * Get the static filters.

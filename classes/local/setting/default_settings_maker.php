@@ -35,6 +35,7 @@ use admin_setting_configcheckbox;
 use admin_setting_configmultiselect;
 use admin_setting_configselect;
 use admin_setting_configtext;
+use admin_setting_configpasswordunmask;
 use admin_setting_configtextarea;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
@@ -195,7 +196,7 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_configtext('block_xp/dmd_apikey',
             get_string('dmd_apikey', 'block_xp'), get_string('dmd_apikey_help', 'block_xp'), ''));
 
-        $settings[] = (new admin_setting_configtext('block_xp/dmd_apisecret',
+        $settings[] = (new admin_setting_configpasswordunmask('block_xp/dmd_apisecret',
             get_string('dmd_apisecret', 'block_xp'), get_string('dmd_apisecret_help', 'block_xp'), ''));
 
 
