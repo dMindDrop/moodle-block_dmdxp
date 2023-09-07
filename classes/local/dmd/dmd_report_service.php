@@ -68,14 +68,17 @@ class dmd_report_service {
 
         if( $this->canReport() ) {
             // TODO: create the task
-            $reportTask = new dmd_points_report();
-            $reportTask->set_custom_data([
-                'userid' => $userid,
-                'points' => $points,
-                'reason' => $reason,
-                'reputationpath' => $reputationpath,
-            ]);
-            \core\task\manager::queue_adhoc_task($reportTask);
+            $user = get_complete_user_data('id', $userid);
+            if( $user->idnumber ) {
+                $reportTask = new dmd_points_report();
+                $reportTask->set_custom_data([
+                    'oidcId' => $user->idnumber,
+                    'points' => $points,
+//                    'reason' => $reason,
+                    'reputationPath' => $reputationpath,
+                ]);
+                \core\task\manager::queue_adhoc_task($reportTask);
+            }
         } else {
             debugging('Cannot report ', DEBUG_DEVELOPER);
 
